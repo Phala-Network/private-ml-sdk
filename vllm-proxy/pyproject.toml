@@ -17,10 +17,12 @@ dstack-sdk = "^0.1.5"
 cryptography = "^43.0.1"
 redis = "^5.2.1"
 nv-local-gpu-verifier = "^2.3.0"
+nv-attestation-sdk = "^2.3.0"
+motor = "^3.7.1"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3.4"
-pytest-asyncio = "^0.25.3"
+pytest = "^8.1.1"
+pytest-asyncio = "^0.23.8"
 respx = "^0.22.0"
 
 [tool.pytest.ini_options]
