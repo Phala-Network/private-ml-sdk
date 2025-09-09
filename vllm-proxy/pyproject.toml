@@ -17,6 +17,7 @@ dstack-sdk = "^0.1.5"
 cryptography = "^43.0.1"
 redis = "^5.2.1"
 nv-ppcie-verifier = "^1.5.0"
+sentry-sdk = {extras = ["fastapi"], version = "^2.0.0"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"

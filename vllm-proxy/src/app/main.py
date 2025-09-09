@@ -1,8 +1,13 @@
 from fastapi import FastAPI, HTTPException, Request
+import sentry_sdk
 
+from .sentry import init_sentry
 from .api import router as api_router
 from .api.response.response import ok, error, http_exception
 from .logger import log
+
+# Initialize Sentry before creating the app
+init_sentry()
 
 app = FastAPI()
 app.include_router(api_router)
@@ -24,6 +29,8 @@ async def global_exception_handler(request: Request, exc: Exception):
         log.error(f"HTTPException: {exc.detail}")
         return http_exception(exc.status_code, exc.detail)
 
+    # Capture exception in Sentry before handling it
+    sentry_sdk.capture_exception(exc)
     log.error(f"Unhandled exception: {exc}")
     return error(
         status_code=500,
