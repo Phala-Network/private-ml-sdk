@@ -4,7 +4,6 @@ from hashlib import sha256
 from typing import Optional
 
 import httpx
-import sentry_sdk
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse, Response
 
@@ -91,7 +90,6 @@ async def stream_vllm_response(
                 except Exception as e:
                     error_message = f"Failed to parse the first chunk: {e}\n The original data is: {data}"
                     log.error(error_message)
-                    sentry_sdk.capture_exception(e, extra={"original_data": data, "chunk": chunk})
                     raise Exception(error_message)
 
             yield chunk
@@ -105,7 +103,6 @@ async def stream_vllm_response(
         else:
             error_message = "Chat id could not be extracted from the response"
             log.error(error_message)
-            sentry_sdk.capture_message(error_message, level="error", extra={"request_sha256": request_sha256})
             raise Exception(error_message)
 
     client = httpx.AsyncClient(timeout=httpx.Timeout(TIMEOUT), headers=COMMON_HEADERS)
@@ -173,7 +170,6 @@ async def non_stream_vllm_response(
             )
         else:
             error_message = "Chat id could not be extracted from the response"
-            sentry_sdk.capture_message(error_message, level="error", extra={"request_sha256": request_sha256, "response_data": response_data})
             raise Exception(error_message)
 
         return response_data
@@ -235,7 +231,6 @@ async def attestation_report(request: Request, signing_algo: str = None):
         return resp
     except Exception as e:
         log.error(f"Error parsing the attestations in cache: {e}")
-        sentry_sdk.capture_exception(e, extra={"signing_algo": signing_algo})
         return unexpect_error("Attestation parsing error")
 
 
@@ -314,7 +309,6 @@ async def signature(request: Request, chat_id: str, signing_algo: str = None):
         value = json.loads(cache_value)
     except Exception as e:
         log.error(f"Failed to parse the cache value: {cache_value} {e}")
-        sentry_sdk.capture_exception(e, extra={"cache_value": cache_value, "chat_id": chat_id})
         return unexpect_error("Failed to parse the cache value")
 
     signing_address = None
