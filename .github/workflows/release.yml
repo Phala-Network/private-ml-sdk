@@ -74,4 +74,4 @@ jobs:
 
             | Image | Digest | Verification |
             |---|---|---|
-            | `docker.io/${{ vars.DOCKERHUB_USERNAME }}/vllm-proxy:${{ github.ref_name }}` | `${{ steps.build-and-push.outputs.digest }}` | [Verify on Sigstore](https://search.sigstore.dev/?search=${{ steps.build-and-push.outputs.digest }})
+            | `docker.io/${{ vars.DOCKERHUB_USERNAME }}/vllm-proxy:${{ github.ref_name }}` | `${{ steps.build-and-push.outputs.digest }}` | [Verify on Sigstore](https://search.sigstore.dev/?hash=${{ steps.build-and-push.outputs.digest }})
