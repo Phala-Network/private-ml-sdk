@@ -43,14 +43,13 @@ jobs:
         run: |
           docker system df
           docker system prune -a -f
-        working-directory: .
 
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./docker/Dockerfile
+          context: vllm-proxy
+          file: vllm-proxy/docker/Dockerfile
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/vllm-proxy:${{ github.ref_name }}
           platforms: linux/amd64,linux/arm64
@@ -61,6 +60,9 @@ jobs:
           subject-name: "docker.io/${{ vars.DOCKERHUB_USERNAME }}/vllm-proxy"
           subject-digest: ${{ steps.build-and-push.outputs.digest }}
           push-to-registry: true
+        env:
+          DOCKER_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
