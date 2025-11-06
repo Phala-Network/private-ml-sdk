@@ -51,16 +51,19 @@ def generate_attestation(context: SigningContext, nonce=None) -> dict:
         "mr_config": "01deadbeef",
         "tcb_info": {"app_compose": "services: []", "mr_config": "01deadbeef"},
     }
+    quote = "mock_intel_quote"
 
     return dict(
         signing_address=context.signing_address,
         signing_key=context.attested_key_bytes.hex(),
         nonce=nonce_hex,
         report_data=report_data.hex(),
-        intel_quote="mock_intel_quote",
+        intel_quote=quote,
         nvidia_payload=payload,
-        event_log={"mock": True},
         info=info,
+        quote=quote,
+        event_log={"mock": True},
+        vm_config="",
     )
 
 

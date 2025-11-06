@@ -169,8 +169,10 @@ def generate_attestation(
         request_nonce=request_nonce_hex,
         intel_quote=quote_result.quote,
         nvidia_payload=nvidia_payload,
-        event_log=event_log,
         info=info,
+        quote=quote_result.quote,
+        event_log=event_log,
+        vm_config=quote_result.vm_config,
     )
 
 
