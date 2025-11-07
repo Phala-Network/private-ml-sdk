@@ -55,14 +55,13 @@ def generate_attestation(context: SigningContext, nonce=None) -> dict:
 
     return dict(
         signing_address=context.signing_address,
-        signing_key=context.attested_key_bytes.hex(),
-        nonce=nonce_hex,
-        report_data=report_data.hex(),
+        signing_algo=context.method,
+        request_nonce=nonce_hex,
         intel_quote=quote,
         nvidia_payload=payload,
         info=info,
         quote=quote,
-        event_log={"mock": True},
+        event_log=json.dumps({"mock": True}),
         vm_config="",
     )
 

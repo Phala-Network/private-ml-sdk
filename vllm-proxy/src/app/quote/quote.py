@@ -153,7 +153,6 @@ def generate_attestation(
 
     client = DstackClient()
     quote_result = client.get_quote(report_data)
-    event_log = json.loads(quote_result.event_log)
 
     # Use request_nonce directly for GPU attestation
     gpu_evidence = _collect_gpu_evidence(request_nonce_hex, NO_GPU_MODE)
@@ -171,7 +170,7 @@ def generate_attestation(
         nvidia_payload=nvidia_payload,
         info=info,
         quote=quote_result.quote,
-        event_log=event_log,
+        event_log=quote_result.event_log,
         vm_config=quote_result.vm_config,
     )
 
