@@ -37,6 +37,7 @@ class TestQuote(unittest.TestCase):
         client.get_quote = lambda report_data: types.SimpleNamespace(
             quote="mock_quote",
             event_log=json.dumps({"mock": True}),
+            vm_config="mock_vm_config",
         )
         client.info = lambda: types.SimpleNamespace(
             model_dump=lambda: {
@@ -91,6 +92,9 @@ class TestQuote(unittest.TestCase):
         self.assertEqual(result["request_nonce"], request_nonce_hex)
         # GPU should use the same request_nonce
         self.assertEqual(json.loads(result["nvidia_payload"])["nonce"], request_nonce_hex)
+        # Verify signing_algo and vm_config fields
+        self.assertEqual(result["signing_algo"], self.quote.ED25519)
+        self.assertIn("vm_config", result)
 
     def test_build_report_data_layout(self):
         identifier = b"\x01" * 16
